@@ -1,0 +1,28 @@
+[submodule "ClinicAppointments"]
+	path = ClinicAppointments
+	url = https://github.com/PiccoloPeccato/ClinicAppointments
+	branch = dev
+[submodule "ClinicPortal"]
+	path = ClinicPortal
+	url = https://github.com/PiccoloPeccato/ClinicPortal
+	branch = dev
+[submodule "ClinicProfiles"]
+	path = ClinicProfiles
+	url = https://github.com/PiccoloPeccato/ClinicProfiles
+	branch = dev
+[submodule "ClinicAuthorization"]
+	path = ClinicAuthorization
+	url = https://github.com/PiccoloPeccato/ClinicAuthorization
+	branch = dev
+[submodule "ClinicGateway"]
+	path = ClinicGateway
+	url = https://github.com/PiccoloPeccato/ClinicGateway
+	branch = dev
+[submodule "ClinicOffices"]
+	path = ClinicOffices
+	url = https://github.com/PiccoloPeccato/ClinicOffices
+	branch = dev
+[submodule "ClinicServices"]
+	path = ClinicServices
+	url = https://github.com/PiccoloPeccato/ClinicServices
+	branch = dev
