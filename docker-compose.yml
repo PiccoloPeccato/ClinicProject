@@ -1,0 +1,83 @@
+version: '3.4'
+
+services:
+  clinicappointments:
+    image: ${DOCKER_REGISTRY-}clinicappointments
+    build:
+      context: ClinicAppointments/ClinicAppointments
+      dockerfile: Dockerfile
+    depends_on:
+      appointmentsdb:
+        condition: service_healthy
+
+  appointmentsdb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+
+  emailserver:
+    image: rnwood/smtp4dev:v3
+    restart: always
+    ports:
+      - '5100:80'
+
+  clinicauthorization:
+    image: ${DOCKER_REGISTRY-}clinicauthorization
+    build:
+      context: ClinicAuthorization/ClinicAuthorization
+      dockerfile: Dockerfile
+    depends_on:
+      authorizationdb:
+        condition: service_healthy
+
+  authorizationdb:
+    image: postgres
+
+  clinicgateway:
+    image: ${DOCKER_REGISTRY-}clinicgateway
+    build:
+      context: ClinicGateway/ClinicGateway
+      dockerfile: Dockerfile
+
+  clinicoffices:
+    image: ${DOCKER_REGISTRY-}clinicoffices
+    build:
+      context: ClinicOffices/ClinicOffices
+      dockerfile: Dockerfile
+    depends_on:
+      officesdb:
+        condition: service_healthy
+
+  officesdb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+
+  clinicprofiles:
+    image: ${DOCKER_REGISTRY-}clinicprofiles
+    build:
+      context: ClinicProfiles/ClinicProfiles
+      dockerfile: Dockerfile
+    depends_on:
+      profilesdb:
+        condition: service_healthy
+
+  profilesdb:
+    image: mongo
+
+  clinicservices:
+    image: ${DOCKER_REGISTRY-}clinicservices
+    build:
+      context: ClinicServices/ClinicServices
+      dockerfile: Dockerfile
+    depends_on:
+      servicesdb:
+        condition: service_healthy
+
+  servicesdb:
+    image: postgres
+
+  clinicportal:
+    image: ${DOCKER_REGISTRY-}clinicportal
+    build:
+      context: ClinicPortal
+      dockerfile: Dockerfile
+
+  rabbitmq:
+    image: masstransit/rabbitmq

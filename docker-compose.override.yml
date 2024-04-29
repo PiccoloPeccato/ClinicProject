@@ -1,0 +1,108 @@
+version: '3.4'
+
+services:
+  clinicappointments:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=80
+    ports:
+      - "5001:80"
+
+  appointmentsdb:
+    environment:
+      - SA_PASSWORD=Pass12345
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "Pass12345" -Q "SELECT 1" -b -o /dev/null
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 3s
+
+  clinicauthorization:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=80
+    ports:
+      - "5000:80"
+
+  authorizationdb:
+    environment:
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  clinicgateway:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=80
+    ports:
+      - "5010:80"
+
+  clinicoffices:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=80
+    ports:
+      - "5004:80"
+
+  officesdb:
+    environment:
+      - SA_PASSWORD=Pass12345
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "Pass12345" -Q "SELECT 1" -b -o /dev/null
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 3s
+    ports:
+      - "5200:1433"
+
+  clinicprofiles:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=80
+    ports:
+      - "5002:80"
+
+  profilesdb:
+    healthcheck:
+      test: ["CMD","mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  clinicservices:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=80
+    ports:
+      - "5003:80"
+
+  servicesdb:
+    environment:
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  clinicportal:
+    ports:
+      - "4200:80"
+
+  rabbitmq:
+    ports:
+      - "15672:15672"
